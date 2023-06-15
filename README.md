@@ -1,31 +1,31 @@
 # Simple Bash Utils
 
-Разработка утилит Bash по работе с текстом: cat, grep.
+Development of Bash text utilities: cat, grep.
+
+The russian version of the task can be found in the repository.
 
 ## Contents
 
 0. [Preamble](#preamble)
 1. [Chapter I](#chapter-i) \
-    1.1. [Introduction](#introduction)
+   1.1. [Introduction](#introduction)
 2. [Chapter II](#chapter-ii) \
-    2.1. [Information](#information)
+   2.1. [Information](#information)
 3. [Chapter III](#chapter-iii) \
-    3.1. [Part 1](#part-1-работа-с-утилитой-cat)  
-    3.2. [Part 2](#part-2-работа-с-утилитой-grep)  
-    3.3. [Part 3](#part-3-дополнительно-реализация-некоторых-флагов-утилиты-grep)  
-    3.4. [Part 4](#part-4-дополнительно-реализация-комбинаций-флагов-утилиты-grep) 
+   3.1. [Part 1](#part-1-working-with-the-cat-utility)  
+   3.2. [Part 2](#part-2-working-with-grep-utility)  
+   3.3. [Part 3](#part-3-bonus-implementation-of-some-grep-utility-flags)  
+   3.4. [Part 4](#part-4-bonus-implementation-of-grep-utility-flag-combinations)
 
 
 ## Preamble
 
-![simple_bash_utils](misc/rus/images/bashutils.png)
+![simple_bash_utils](misc/eng/images/bashutils.png)
 
-То был обычный серый осенний день 1993 года. Вы пришли домой со своей работы в Hewlett-Packard, 
-немного уставший. У вас была небольшая двухкомнатная квартира на окраинах города N, 
-а в холодильнике был слабоалкогольный напиток под названием pivo. Вы взяли этот напиток, 
-пачку крекеров и пошли в свое укромное местечко, где стоял компьютер производства Dell.
+It was an ordinary grey autumn day in 1993. You came home from work at Hewlett-Packard, feeling a little tired. You had a small two-room apartment on the outskirts of N town. There was a low-alcohol drink in the refrigerator called "pivo". You took that drink and a bag of crackers then went to your little nook, to your computer made by Dell.
 
-`*Щелчок*` - нажата кнопка включения. Пару минут загрузки и..да, это приятное чувство. Вы всегда испытываете его при включении компьютера. Пару секунд недвижимого наслаждения и вот вы уже открываете браузер Mosaic, заходите на свой любимый форум..листаете треды, попивая pivo. И вдруг натыкаетесь на очень интересное обсуждение, которое началось следующим сообщением:
+`*Click*` - the power button was pressed. A couple of minutes of boot loading and... yeah, it feels good. You always get that feeling when you turn on a computer. A few seconds of undisturbed pleasure and you opened
+the Mosaic browser. Then you went to your favorite forum, and while drinking pivo, you read some threads. Suddenly you came across a very interesting discussion, which began with the following message:
 
 > Hello everybody out there using minix -
 >
@@ -39,114 +39,115 @@
 >
 >— Linus Torvalds
 
-"Очень любопытно", - подумали вы про себя. Пролистав тред ниже вы заметили, что bash не так уж 
-хорошо портирован, и некоторые функции не работают. В частности возникли проблемы с утилитами 
-по работе с текстом: cat и grep.
-"Интересная задачка, заодно будет здорово помочь этому Линусу Торвальдсу", - сказали вы вслух и сразу же написали в 
-тред сообщение о том, что уже начинаете этим заниматься. Что ж, начинайте!
+"Very interesting," you thought to yourself. As you scrolled down, you noticed that bash is not that well ported, and some functions didn't work. 
+In particular, there were problems with the utilities for word processing: cat and grep.
+"Interesting task, and it would be great to help this Linus Torvalds," you said aloud and immediately wrote a message in the thread saying that you're already working on it. 
+Well, let’s start!
 
 ## Chapter I
 
 ## Introduction
 
-В этом проекте Вам предстоит познакомиться ближе и разработать базовые утилиты Bash по работе с текстами на языке программирования Си. Эти утилиты (cat и grep) достаточно часто используются при работе в терминале Linux. В рамках этого проекта предполагается знакомство с организацией утилит Bash и закрепление структурного подхода.  
+In this project you will learn and develop basic Bash utilities for working with C programming language texts. These utilities (cat and grep) are often used in the Linux terminal. As part of the project you’ll learn the organization of the Bash utilities and solidify knowledge of structured programming.
 
 
 ## Chapter II
 
 ## Information
 
-### cat История
+### cat History
 
-> cat был частью ранних версий Unix, например, Версии 1, и заменил pr, утилиту PDP-7 и Multics для копирования одного файла на экран.
+> cat was part of the early versions of Unix, e.g., Version 1, and replaced pr, a PDP-7 and Multics utility for copying a single file to the screen.
 
-### cat Использование
+### cat Usage
 
-Cat - одна из наиболее часто используемых команд в Unix-подобных операционных системах. Команда имеет три взаимосвязанные функции в отношении текстовых файлов: отображение, объединение их копий и создание новых.
+Cat is one of the most frequently used commands on Unix-like operating systems. It has three related functions with regard to text files: displaying them, combining copies of them and creating new ones.
 
 `cat [OPTION] [FILE]...`
 
-### cat Опции
+### cat Options
 
-| № | Опции | Описание |
+| No. | Options | Description |
 | ------ | ------ | ------ |
-| 1 | -b (GNU: --number-nonblank) | нумерует только непустые строки |
-| 2 | -e предполагает и -v (GNU only: -E то же самое, но без применения -v) | также отображает символы конца строки как $  |
-| 3 | -n (GNU: --number) | нумерует все выходные строки |
-| 4 | -s (GNU: --squeeze-blank) | сжимает несколько смежных пустых строк |
-| 5 | -t предполагает и -v (GNU: -T то же самое, но без применения -v) | также отображает табы как ^I |
+| 1 | -b (GNU: --number-nonblank) | numbers only non-empty lines |
+| 2 | -e implies -v (GNU only: -E the same, but without implying -v) | but also display end-of-line characters as $  |
+| 3 | -n (GNU: --number) | number all output lines |
+| 4 | -s (GNU: --squeeze-blank) | squeeze multiple adjacent blank lines |
+| 5 | -t implies -v (GNU: -T the same, but without implying -v) | but also display tabs as ^I  |
 
-### grep История
+### grep History
 
-> Томпсон написал первую версию на PDP-11 языке ассемблера, чтобы помочь Ли Э. МакМахону. проанализировать текст Записок Федералиста для того, чтобы определить авторство отдельных статей. Текстовый редактор ed (также созданный Томпсоном) имел поддержку регулярных выражений, но не мог использоваться для такого большого объема текста, поэтому Томпсон извлек этот код в отдельный инструмент. Он выбрал это название, потому что в ed команда g / re / p печатала все строки, соответствующие заданному шаблону. 
-grep впервые был включен в Версию 4 Unix. Заявив, что он «обычно упоминается как прототип программного средства», Макилрой приписал grep «безвозвратное внедрение» философии инструментов Томпсона в Unix.
+> Thompson wrote the first version in PDP-11 assembly language to help Lee E. McMahon analyze the text of the Federalist Papers to determine authorship of the individual papers. The ed text editor (also authored by Thompson) had regular expression support but could not be used on such a large amount of text, so Thompson excerpted that code into a standalone tool. He chose the name because in ed, the command g/re/p would print all lines matching a specified pattern. grep was first included in Version 4 Unix. Stating that it is "generally cited as the prototypical software tool", McIlroy credited grep with "irrevocably ingraining" Thompson's tools philosophy in Unix.
 
-### grep Использование
+### grep Usage
 
 `grep [options] template [file_name]`
 
-### grep Опции
+### grep Options
 
-| № | Опции | Описание |
+| No. | Options | Description |
 | ------ | ------ | ------ |
-| 1 | -e | Шаблон |
-| 2 | -i | Игнорирует различия регистра.  |
-| 3 | -v | Инвертирует смысл поиска соответствий. |
-| 4 | -c | Выводит только количество совпадающих строк. |
-| 5 | -l | Выводит только совпадающие файлы.  |
-| 6 | -n | Предваряет каждую строку вывода номером строки из файла ввода. |
-| 7 | -h | Выводит совпадающие строки, не предваряя их именами файлов. |
-| 8 | -s | Подавляет сообщения об ошибках о несуществующих или нечитаемых файлах. |
-| 9 | -f file | Получает регулярные выражения из файла. |
-| 10 | -o | Печатает только совпадающие (непустые) части совпавшей строки. |
+| 1 | -e | pattern |
+| 2 | -i | Ignore uppercase vs. lowercase.  |
+| 3 | -v | Invert match. |
+| 4 | -c | Output count of matching lines only. |
+| 5 | -l | Output matching files only.  |
+| 6 | -n | Precede each matching line with a line number. |
+| 7 | -h | Output matching lines without preceding them by file names. |
+| 8 | -s | Suppress error messages about nonexistent or unreadable files. |
+| 9 | -f file | Take regexes from a file. |
+| 10 | -o | Output the matched parts of a matching line. |
 
 
 ## Chapter III
 
-- Программы должны быть разработаны на языке Си стандарта C11 с использованием компилятора gcc 
-- Код программ cat и grep должен находиться в ветке develop в папках src/cat/ и src/grep/ соответственно  
-- Не использовать устаревшие и выведенные из употребления конструкции языка и библиотечные функции. Обращать внимания на пометки legacy и obsolete в официальной документации по языку и используемым библиотекам. Ориентироваться на стандарт POSIX.1-2017 
-- При написании кода необходимо придерживаться Google Style
-- Программы должны представлять собой исполняемый файл с аргументами командной строки
-- Сборка программ должна быть настроена с помощью Makefile с соответствующими целями: s21_cat, s21_grep  
-- Если используются сторонние библиотеки, в Makefile должны быть заложены сценарии сборки, предусматривающие их подключение/загрузку 
-- Необходимо покрытие интеграционными тестами для всех вариантов флагов и входных значений, на базе сравнения с поведением реальных утилит Bash
-- Программа должна быть разработана в соответствии с принципами структурного программирования
-- Необходимо исключить дублирование кода, переиспользовать общие модули между утилитами. Общие модули можно вынести в отдельную папку src/common
-- Можно использовать стандартные и нестандартные библиотеки языка Си, можно использовать собственноручно разработанные библиотеки из других проектов
-- Формулировка сообщения при возникновении ошибочной ситуации не имеет значения
-- Ввод через stdin обрабатывать не обязательно
+- The programs must be developed in C language of C11 standard using gcc compiler.
+- The program code of the cat and grep must be located on the develop branch in the src/cat/ and src/grep/ folders, respectively  
+- Do not use outdated and legacy language constructions and library functions. Pay attention to the legacy and obsolete marks in the official documentation on the language and the libraries used. Use the POSIX.1-2017 standard.
+- When writing code it is necessary to follow the Google style
+- The programs must be executable files with command line arguments
+- The programs must be built with Makefile with appropriate targets: s21_cat, s21_grep
+- If third-party libraries are used, there must be build scripts in makefile to connect/load them
+- Integration tests must cover all flag variants and input values, based on a comparison with the behavior of real Bash utilities 
+- The programs must be developed according to the principles of structured programming
+- Code duplication must be avoided, common modules must be reused between the utilities. Common modules can be moved to a separate folder src/common
+- You can use standard and non-standard C libraries, or you can use your own developed libraries from other projects
+- The statement of the message in the case of an error does not matter
+- Input via stdin is not required to be supported
+
+## Part 1. Working with the cat utility
+
+You need to develop a cat utility:
+- Support of all flags (including GNU versions) specified [above](#cat-options)
+- The source, header, and build files must be placed in the src/cat/ directory
+- The resulting executable file must be placed in the directory src/cat/ and named s21_cat
+
+## Part 2. Working with grep utility
+
+You need to develop the grep utility:
+- Support of the following flags: `-e`, `-i`, `-v`, `-c`, `-l`, `-n`
+- Only pcre or regex libraries can be used for regular expressions
+- The source, header and make files must be placed in the src/grep/ directory
+- The resulting executable file must be placed in the directory src/grep/ and named s21_grep
+
+## Part 3. Bonus. Implementation of some grep utility flags
+
+Bonus assignment for extra points. You need to develop the grep utility:
+- Support of all flags, including: `-h`, `-s`, `-f`, `-o`
+- Only pcre or regex libraries can be used for regular expressions
+- The source, header and make files must be placed in the src/grep/ directory
+- The resulting executable file must be placed in the directory src/grep/ and named s21_grep
+
+## Part 4. Bonus. Implementation of grep utility flag combinations
+
+Bonus assignment for extra points. You need to develop the grep utility:
+- Support of all flags, including their _pair_ combinations (e.g. `-iv`, `-in`)
+- Only pcre or regex libraries can be used for regular expressions
+- The source, header and make files must be placed in the src/grep/ directory
+- The resulting executable file must be placed in the directory src/grep/ and named s21_grep
 
 
-## Part 1. Работа с утилитой cat
 
-Необходимо разработать утилиту cat:
-- Поддержка всех флагов (включая GNU версии), указанных [выше](#cat-опции)
-- Исходные, заголовочные и сборочный файлы должны располагаться в директории src/cat/
-- Итоговый исполняемый файл должен располагаться в директории src/cat/ и называться s21_cat
+💡 [Tap here](https://forms.yandex.ru/cloud/64144c1bc09c020aafe7a4f3/) **to leave your feedback on the project**. Pedago Team really tries to make your educational experience better.
 
-## Part 2. Работа с утилитой grep
 
-Необходимо разработать утилиту grep:
-- Поддержка следующих флагов: `-e`, `-i`, `-v`, `-c`, `-l`, `-n`
-- Для регулярных выражений можно использовать только библиотеки pcre или regex  
-- Исходные, заголовочные и make файлы должны располагаться в директории src/grep/
-- Итоговый исполняемый файл должен располагаться в директории src/grep/ и называться s21_grep
-
-## Part 3. Дополнительно. Реализация некоторых флагов утилиты grep
-
-Необязательное задание на дополнительные баллы. Необходимо разработать утилиту grep:
-- Поддержка всех флагов, включая: `-h`, `-s`, `-f`, `-o`
-- Для регулярных выражений можно использовать только библиотеки pcre или regex  
-- Исходные, заголовочные и make файлы должны располагаться в директории src/grep/
-- Итоговый исполняемый файл должен располагаться в директории src/grep/ и называться s21_grep
-
-## Part 4. Дополнительно. Реализация комбинаций флагов утилиты grep
-
-Необязательное задание на дополнительные баллы. Необходимо разработать утилиту grep:
-- Поддержка всех флагов, включая их _парные_ комбинации (например, `-iv`, `-in`)
-- Для регулярных выражений можно использовать только библиотеки pcre или regex
-- Исходные, заголовочные и make файлы должны располагаться в директории src/grep/
-- Итоговый исполняемый файл должен располагаться в директории src/grep/ и называться s21_grep
-
-💡 [Нажми тут](https://forms.yandex.ru/cloud/64144c1bc09c020aafe7a4f3/), **чтобы поделиться с нами обратной связью на этот проект**. Это анонимно и поможет команде Педаго сделать твоё обучение лучше.

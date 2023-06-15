@@ -1,0 +1,17 @@
+This is a test file.
+
+     
+
+Hello, world!
+
+
+Hello -r hi there
+Hi -e hello
+lorem
+privet m-к
+
+Hello
+hello
+hello
+WORLD
+world
